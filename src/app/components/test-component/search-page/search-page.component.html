@@ -1,0 +1,15 @@
+<div>
+  <input type="text" [(ngModel)]="searchQuery" placeholder="Enter search term">
+  <button (click)="search()">Search</button>
+</div>
+
+<div *ngIf="searchResults.length > 0">
+  <h2>Search Results</h2>
+  <div *ngFor="let show of searchResults" class="show-item">
+    <h3>{{ show.name }}</h3>
+    <p *ngIf="show.summary" [innerHTML]="show.summary"></p>
+    <img *ngIf="show.image && show.image.medium" [src]="show.image.medium" alt="{{ show.name }}">
+    <p *ngIf="show.genres?.length">Genres: {{ show.genres.join(', ') }}</p>
+    <p *ngIf="show.rating && show.rating.average">Rating: {{ show.rating.average }}</p>
+  </div>
+</div>
