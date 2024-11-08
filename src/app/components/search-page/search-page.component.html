@@ -3,6 +3,7 @@
   <button (click)="search()">Search</button>
 </div>
 
+<!--
 <div *ngIf="searchResults.length > 0">
   <h2>Search Results</h2>
   <div *ngFor="let show of searchResults" class="show-item">
@@ -11,5 +12,25 @@
     <img *ngIf="show.image && show.image.medium" [src]="show.image.medium" alt="{{ show.name }}">
     <p *ngIf="show.genres?.length">Genres: {{ show.genres.join(', ') }}</p>
     <p *ngIf="show.rating && show.rating.average">Rating: {{ show.rating.average }}</p>
+  </div>
+</div>
+-->
+
+
+<div *ngIf="searchResults.length > 0">
+  <h2>Search Results</h2>
+  <div *ngFor="let show of searchResults" class="show-item">
+    <div class="card d-flex flex-row align-items-center" style="background-color: cadetblue; width: 450px;">
+
+
+      <app-card
+        [title]="show.name"
+        [genres]="show.genres"
+        [summary]="shortSummary(stripHtmlTags(show.summary))"
+        [rating]="show.rating?.average"
+        [image]="show.image">
+      </app-card>
+
+    </div>
   </div>
 </div>

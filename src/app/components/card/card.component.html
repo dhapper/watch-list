@@ -1,0 +1,18 @@
+<div class="card d-flex flex-row align-items-center" style="background-color: cadetblue; width: 450px;">
+    <!-- Text container on the left -->
+    <div class="card-body" style="flex: 1;">
+      <h5>{{ title }}</h5>
+      <p>{{ genres }}</p>
+      <p>{{ summary }}</p>
+      <p>Rating: {{ rating !== null && rating !== undefined ? rating : 'N/A' }}</p>
+    </div>
+    
+    <!-- Image container on the right -->
+    <div>
+      <img *ngIf="image && image.medium" 
+           [src]="image.medium" 
+           alt="{{ title }}" 
+           class="img-fluid" 
+           style="width: 150px; height: 200px; object-fit: cover;">
+    </div>
+  </div>
