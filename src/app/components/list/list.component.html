@@ -1,0 +1,17 @@
+<!-- list.component.html -->
+<div>
+    <h2>Show IDs for User: {{ username }}</h2>
+  
+    <!-- Display the list of show IDs -->
+    <div *ngIf="showIds.length > 0; else noShows">
+      <ul>
+        <li *ngFor="let id of showIds">{{ id }}</li>
+      </ul>
+    </div>
+  
+    <!-- Display a message if no show IDs are found -->
+    <ng-template #noShows>
+      <p>No show IDs found for this user.</p>
+    </ng-template>
+  </div>
+  

@@ -28,7 +28,9 @@
         [genres]="show.genres"
         [summary]="shortSummary(stripHtmlTags(show.summary))"
         [rating]="show.rating?.average"
-        [image]="show.image">
+        [image]="show.image"
+        [isButton]="true"
+        [id]="show.id">
       </app-card>
 
     </div>
