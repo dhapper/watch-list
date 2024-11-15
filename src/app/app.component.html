@@ -1,5 +1,3 @@
-<app-test-component></app-test-component>
+<app-nav-bar *ngIf="!isLoginPage"></app-nav-bar>
 
-<app-list></app-list>
-
-<app-search-page></app-search-page> 
+<router-outlet></router-outlet>

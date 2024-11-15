@@ -36,10 +36,17 @@ const userProfileSchema = new mongoose.Schema({
 // Create the UserProfile model with the correct collection name ('user-profile')
 const UserProfile = mongoose.model('UserProfile', userProfileSchema, 'user-profile');
 
-// Endpoint to create a new user profile
+// Endpoint to create a new user profile (only if it doesn't exist)
 app.post('/api/user-profiles', async (req, res) => {
   try {
     const { username, showIds } = req.body;
+
+    // Check if the user profile already exists
+    const existingProfile = await UserProfile.findOne({ username });
+    if (existingProfile) {
+      return res.status(400).json({ error: 'User profile already exists' });
+    }
+
     // Create a new user profile document
     const newProfile = new UserProfile({ username, showIds });
     await newProfile.save();
@@ -48,6 +55,7 @@ app.post('/api/user-profiles', async (req, res) => {
     res.status(500).json({ error: 'Failed to create user profile', details: error });
   }
 });
+
 
 // Endpoint to get the user profile by username (show IDs)
 app.get('/api/user-profiles/:username', async (req, res) => {

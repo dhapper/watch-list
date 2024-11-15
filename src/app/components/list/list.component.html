@@ -1,17 +1,26 @@
-<!-- list.component.html -->
 <div>
-    <h2>Show IDs for User: {{ username }}</h2>
+  <h2>Show IDs for User: {{ username }}</h2>
   
-    <!-- Display the list of show IDs -->
-    <div *ngIf="showIds.length > 0; else noShows">
-      <ul>
-        <li *ngFor="let id of showIds">{{ id }}</li>
-      </ul>
+  <!-- Display the list of show IDs -->
+  <div *ngIf="shows.length > 0; else noShows">
+    <div *ngFor="let show of shows" class="d-flex align-items-center mb-3">
+      <!-- Card Component -->
+      <app-card
+        [title]="show.name"
+        [genres]="show.genres"
+        [rating]="show.rating?.average"
+        [image]="show.image"
+        [isButton]="false"
+        [id]="show.id">
+      </app-card>
+
+      <!-- Remove Button -->
+      <button class="btn btn-danger ms-3" (click)="removeShow(show.id)">Remove</button>
     </div>
-  
-    <!-- Display a message if no show IDs are found -->
-    <ng-template #noShows>
-      <p>No show IDs found for this user.</p>
-    </ng-template>
   </div>
   
+  <!-- Display a message if no show IDs are found -->
+  <ng-template #noShows>
+    <p>No show IDs found for this user.</p>
+  </ng-template>
+</div>

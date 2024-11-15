@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';  // Import CommonModule for *ngI
 import { TvMazeService } from '../../services/tvmaze.service';
 import { Show } from '../../models/show';
 import { CardComponent } from "../card/card.component";
+import { SessionService } from '../../services/session.service';
 
 @Component({
   selector: 'app-search-page',
@@ -15,8 +16,16 @@ import { CardComponent } from "../card/card.component";
 export class SearchPageComponent {
   searchQuery: string = '';
   searchResults: Show[] = [];
+  username: string = '';
 
-  constructor(private tvMazeService: TvMazeService) {}
+  constructor(
+    private tvMazeService: TvMazeService,
+    private sessionService: SessionService
+  ) {}
+
+  ngOnInit(): void {
+    this.username = this.sessionService.getUsername();
+  }
 
   search() {
     if (this.searchQuery) {
