@@ -29,7 +29,7 @@ export class LoginPageComponent {
     const user = { username: this.username, password: this.password };
     this.userService.register(user).subscribe(
         response => {
-            console.log('Registration successful', response);
+            console.log(response);
             this.username = '';
             this.password = '';
 
@@ -46,11 +46,17 @@ export class LoginPageComponent {
   }
 
   login() {
+    if(this.username == 'guest' && this.password == 'guest'){
+      console.log("Accessing guest account, bypassing Java connection.");
+      this.sessionService.setUsername(this.username);
+      this.router.navigate(['/profile']);
+      return;
+    }
     const user = { username: this.username, password: this.password };
     this.userService.login(user).subscribe(
       response => {
         if (response.success) {
-          console.log('Login successful:', response.message);
+          console.log(response.message);
           this.alertMessage = response.message;
           this.alertMessageClass = 'alert-success';
   
@@ -60,7 +66,7 @@ export class LoginPageComponent {
           // Navigate to the profile page
           this.router.navigate(['/profile']);
         } else {
-          console.log('Login failed:', response.message);
+          console.log(response.message);
           this.alertMessage = response.message;
           this.alertMessageClass = 'alert-danger'; 
         }

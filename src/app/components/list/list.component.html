@@ -1,26 +1,39 @@
-<div>
-  <h2>Show IDs for User: {{ username }}</h2>
-  
-  <!-- Display the list of show IDs -->
-  <div *ngIf="shows.length > 0; else noShows">
-    <div *ngFor="let show of shows" class="d-flex align-items-center mb-3">
-      <!-- Card Component -->
-      <app-card
-        [title]="show.name"
-        [genres]="show.genres"
-        [rating]="show.rating?.average"
-        [image]="show.image"
-        [isButton]="false"
-        [id]="show.id">
-      </app-card>
+<head>
+  <!-- for garbage can icon -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet">
+</head>
 
-      <!-- Remove Button -->
-      <button class="btn btn-danger ms-3" (click)="removeShow(show.id)">Remove</button>
+<div class="container-fluid py-5" style="background-color: #2c3e50; min-height: 100vh;">
+  <div class="card p-4 shadow-lg mx-auto" style="width: 80%; max-width: 800px; background-color: #34495e; color: #ecf0f1;">
+    <h2 class="text-center mb-4">{{ username }}'s watch-list</h2>
+    
+    <!-- Display the list of show IDs -->
+    <div *ngIf="shows.length > 0; else noShows">
+      <div *ngFor="let show of shows" class="d-flex align-items-center mb-2 p-3" style="border-bottom: 1px solid #7f8c8d;">
+        <!-- Card Component -->
+        <app-card
+          [title]="show.name"
+          [genres]="show.genres"
+          [rating]="show.rating?.average"
+          [image]="show.image"
+          [isButton]="false"
+          [id]="show.id"
+          class="flex-grow-1">
+        </app-card>
+
+        <!-- Remove Button -->
+        <button class="btn btn-outline-secondary d-flex align-items-center ml-3" (click)="removeShow(show.id)" style="height: 40px;">
+          <i class="bi bi-trash"></i>
+        </button>
+
+      </div>
     </div>
+    
+    <!-- Display a message if no show IDs are found -->
+    <ng-template #noShows>
+      <div class="text-center p-4" style="background-color: #7f8c8d; border-radius: 5px;">
+        <p class="mb-0">No shows in your list :(</p>
+      </div>
+    </ng-template>
   </div>
-  
-  <!-- Display a message if no show IDs are found -->
-  <ng-template #noShows>
-    <p>No show IDs found for this user.</p>
-  </ng-template>
 </div>

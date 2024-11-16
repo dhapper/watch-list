@@ -1,38 +1,33 @@
-<div>
-  <input type="text" [(ngModel)]="searchQuery" placeholder="Enter search term">
-  <button (click)="search()">Search</button>
-</div>
+<div class="container-fluid py-5" style="background-color: #2c3e50; min-height: 100vh;">
+  <div class="card p-4 shadow-lg mx-auto" style="max-width: 800px; background-color: #34495e; color: #ecf0f1;">
+    <h2 class="text-center mb-4">Search Page</h2>
 
-<!--
-<div *ngIf="searchResults.length > 0">
-  <h2>Search Results</h2>
-  <div *ngFor="let show of searchResults" class="show-item">
-    <h3>{{ show.name }}</h3>
-    <p *ngIf="show.summary" [innerHTML]="show.summary"></p>
-    <img *ngIf="show.image && show.image.medium" [src]="show.image.medium" alt="{{ show.name }}">
-    <p *ngIf="show.genres?.length">Genres: {{ show.genres.join(', ') }}</p>
-    <p *ngIf="show.rating && show.rating.average">Rating: {{ show.rating.average }}</p>
-  </div>
-</div>
--->
+    <!-- Search Bar -->
+    <div class="d-flex justify-content-center mb-4">
+      <input type="text" [(ngModel)]="searchQuery" placeholder="Enter search term" class="form-control" style="max-width: 500px; margin-right: 10px;">
+      <button (click)="search()" class="btn btn-primary">Search</button>
+    </div>
 
+    <!-- Display search results -->
+    <div *ngIf="searchResults.length > 0">
+      <h2 class="text-center text-white mb-4">Search Results</h2>
+      <div *ngFor="let show of searchResults" class="d-flex justify-content-center mb-3">
+        
+        <app-card
+          [title]="show.name"
+          [genres]="show.genres"
+          [summary]="shortSummary(stripHtmlTags(show.summary))"
+          [rating]="show.rating?.average"
+          [image]="show.image"
+          [isButton]="true"
+          [id]="show.id">
+        </app-card>
+      </div>
+    </div>
 
-<div *ngIf="searchResults.length > 0">
-  <h2>Search Results</h2>
-  <div *ngFor="let show of searchResults" class="show-item">
-    <div class="card d-flex flex-row align-items-center" style="background-color: cadetblue; width: 450px;">
-
-
-      <app-card
-        [title]="show.name"
-        [genres]="show.genres"
-        [summary]="shortSummary(stripHtmlTags(show.summary))"
-        [rating]="show.rating?.average"
-        [image]="show.image"
-        [isButton]="true"
-        [id]="show.id">
-      </app-card>
-
+    <!-- Message when no results -->
+    <div *ngIf="searchResults.length === 0" class="text-center text-white mt-4">
+      <p>No results found. Try searching for something else.</p>
     </div>
   </div>
 </div>
