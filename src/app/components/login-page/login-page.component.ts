@@ -18,6 +18,7 @@ export class LoginPageComponent {
   password: string = '';
   alertMessage: string = '';
   alertMessageClass: string = '';
+  loading: boolean = false; // Track if the request is loading
 
   constructor(
     private userService: UserService,
@@ -26,35 +27,37 @@ export class LoginPageComponent {
   ) {}
 
   register() {
+    this.loading = true; // Set loading to true when the request starts
     const user = { username: this.username, password: this.password };
     this.userService.register(user).subscribe(
-        response => {
-            console.log(response);
-            this.username = '';
-            this.password = '';
-
-            this.alertMessage = response.message;
-            if(response.success)
-              this.alertMessageClass = 'alert-success'; 
-            else
-              this.alertMessageClass = 'alert-danger'; 
-        },
-        error => {
-            console.error('Registration failed', error);
-        }
+      response => {
+        this.loading = false; // Set loading to false when the request finishes
+        this.username = '';
+        this.password = '';
+        this.alertMessage = response.message;
+        this.alertMessageClass = response.success ? 'alert-success' : 'alert-danger'; 
+      },
+      error => {
+        this.loading = false; // Set loading to false on error
+        this.alertMessage = 'Error connecting to server';
+        this.alertMessageClass = 'alert-danger';
+      }
     );
   }
 
   login() {
-    if(this.username == 'guest' && this.password == 'guest'){
+    this.loading = true; // Set loading to true when the request starts
+    if (this.username == 'guest' && this.password == 'guest') {
       console.log("Accessing guest account, bypassing Java connection.");
       this.sessionService.setUsername(this.username);
       this.router.navigate(['/profile']);
+      this.loading = false; // Set loading to false after successful login
       return;
     }
     const user = { username: this.username, password: this.password };
     this.userService.login(user).subscribe(
       response => {
+        this.loading = false; // Set loading to false when the request finishes
         if (response.success) {
           console.log(response.message);
           this.alertMessage = response.message;
@@ -72,12 +75,11 @@ export class LoginPageComponent {
         }
       },
       error => {
+        this.loading = false; // Set loading to false on error
         console.error('An error occurred during login:', error);
+        this.alertMessage = 'Error connecting to server';
+        this.alertMessageClass = 'alert-danger'; 
       }
     );
   }
-  
-  
-
-
 }

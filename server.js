@@ -11,10 +11,16 @@ app.use(cors());
 // Parse incoming JSON requests
 app.use(express.json());
 
-// MongoDB connection (replace with your connection string if necessary)
-mongoose.connect('mongodb://localhost:27017/watch-list')
+// MongoDB Atlas connection string
+const mongoURI = 'mongodb+srv://watch-list-db-user:watch-list-db-password@cluster0.tyzvxaq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+
+// MongoDB connection
+mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
   .then(() => {
-    console.log('Connected to MongoDB');
+    console.log('Connected to MongoDB Atlas');
     // After successful connection, print all the documents in the collection
     UserProfile.find()
       .then(profiles => {
@@ -25,12 +31,12 @@ mongoose.connect('mongodb://localhost:27017/watch-list')
         console.log('Error fetching profiles:', err);
       });
   })
-  .catch(err => console.log('Failed to connect to MongoDB:', err));
+  .catch(err => console.log('Failed to connect to MongoDB Atlas:', err));
 
 // Define the UserProfile schema with showIds
 const userProfileSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true }, // Ensure username is unique
-  showIds: { type: [Number], default: [] } // Array of show IDs
+  showIds: { type: [Number], default: [] }, // Array of show IDs
 });
 
 // Create the UserProfile model with the correct collection name ('user-profile')
@@ -55,7 +61,6 @@ app.post('/api/user-profiles', async (req, res) => {
     res.status(500).json({ error: 'Failed to create user profile', details: error });
   }
 });
-
 
 // Endpoint to get the user profile by username (show IDs)
 app.get('/api/user-profiles/:username', async (req, res) => {
