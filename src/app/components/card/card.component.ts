@@ -19,7 +19,10 @@ export class CardComponent {
   @Input() image?: { medium: string; original: string };
   @Input() isButton: boolean = false;
   @Input() id: number = 0;
+
+  alertMessage: string = ''; // Property for the alert message
   username: string = '';
+  hovered: boolean = false; // Property to track hover state
 
   constructor(
     private tvMazeService: TvMazeService,
@@ -27,44 +30,42 @@ export class CardComponent {
     private sessionService: SessionService
   ) {}
 
-  hovered: boolean = false;
-
   onMouseEnter() {
-    this.hovered = true;
+    this.hovered = true; // Set hovered state to true
   }
 
   onMouseLeave() {
-    this.hovered = false;
+    this.hovered = false; // Set hovered state to false
   }
 
   onCardClick() {
     if (this.id) {
-      // Fetch current user's profile to get the show IDs
-      this.username = this.sessionService.getUsername(); // Example username; adjust as needed
+      this.username = this.sessionService.getUsername();
       this.userProfileService.getUserProfile(this.username).subscribe(
         (response) => {
-          let showIds = response.showIds || []; // Get the current show IDs or initialize an empty array
-          if (!showIds.includes(this.id)) { // Only add if ID is not already present
-            showIds.push(this.id); // Add the current show's ID
+          let showIds = response.showIds || [];
+          if (!showIds.includes(this.id)) {
+            showIds.push(this.id);
             this.userProfileService.updateUserProfile(this.username, showIds).subscribe(
               () => {
-                console.log(`Show ID ${this.id} added successfully`);
+                this.alertMessage = `${this.title} has been added to your watch-list`; // Set alert message
+                setTimeout(() => (this.alertMessage = ''), 3000); // Clear the message after 3 seconds
               },
               (error) => {
                 console.error('Failed to update show IDs', error);
               }
             );
           } else {
-            console.log(`Show ID ${this.id} is already in the list`);
+            this.alertMessage = `${this.title} is already in your watch-list`; // Show already exists message
+            setTimeout(() => (this.alertMessage = ''), 3000); // Clear the message after 3 seconds
           }
         },
         (error) => {
-          // If profile fetch fails (likely because the user doesn't exist), create a new profile
           if (error.status === 404) {
-            console.log("User profile not found, creating a new profile");
             this.userProfileService.createUserProfile(this.username, [this.id]).subscribe(
               () => {
-                console.log(`New profile created for user ${this.username} with show ID ${this.id}`);
+                this.alertMessage = `${this.title} has been added to your watch-list`; // New profile message
+                setTimeout(() => (this.alertMessage = ''), 3000); // Clear the message after 3 seconds
               },
               (createError) => {
                 console.error('Failed to create new profile', createError);
@@ -79,5 +80,4 @@ export class CardComponent {
       console.log("No show ID provided");
     }
   }
-  
 }
